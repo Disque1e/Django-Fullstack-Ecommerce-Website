@@ -1,0 +1,179 @@
+{% extends 'app/base.html' %}
+{% block title %} Components {% endblock title%}
+
+{% block main-content %}
+    <h1 class="my-5 text-center fw-bold">Inventory of Components for Equipment Assembly</h1>
+    <div class="text-center mb-3">
+        <div class="btn-group">
+            <a type="button" class="btn btn-outline-secondary" href="{% url 'AddComponent' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+            </a> 
+            <a type="button" class="btn btn-outline-secondary" href="{% url 'ExportToJSON' %}" onclick="downloadFile()">
+                <label for="jsonFileInput" style="cursor: pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-json" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M14 4.5V11h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM4.151 15.29a1.176 1.176 0 0 1-.111-.449h.764a.578.578 0 0 0 .255.384c.07.049.154.087.25.114.095.028.201.041.319.041.164 0 .301-.023.413-.07a.559.559 0 0 0 .255-.193.507.507 0 0 0 .084-.29.387.387 0 0 0-.152-.326c-.101-.08-.256-.144-.463-.193l-.618-.143a1.72 1.72 0 0 1-.539-.214 1.001 1.001 0 0 1-.352-.367 1.068 1.068 0 0 1-.123-.524c0-.244.064-.457.19-.639.128-.181.304-.322.528-.422.225-.1.484-.149.777-.149.304 0 .564.05.779.152.217.102.384.239.5.41.12.17.186.359.2.566h-.75a.56.56 0 0 0-.12-.258.624.624 0 0 0-.246-.181.923.923 0 0 0-.37-.068c-.216 0-.387.05-.512.152a.472.472 0 0 0-.185.384c0 .121.048.22.144.3a.97.97 0 0 0 .404.175l.621.143c.217.05.406.12.566.211a1 1 0 0 1 .375.358c.09.148.135.335.135.56 0 .247-.063.466-.188.656a1.216 1.216 0 0 1-.539.439c-.234.105-.52.158-.858.158-.254 0-.476-.03-.665-.09a1.404 1.404 0 0 1-.478-.252 1.13 1.13 0 0 1-.29-.375Zm-3.104-.033a1.32 1.32 0 0 1-.082-.466h.764a.576.576 0 0 0 .074.27.499.499 0 0 0 .454.246c.19 0 .33-.055.422-.164.091-.11.137-.265.137-.466v-2.745h.791v2.725c0 .44-.119.774-.357 1.005-.237.23-.565.345-.985.345a1.59 1.59 0 0 1-.568-.094 1.145 1.145 0 0 1-.407-.266 1.14 1.14 0 0 1-.243-.39Zm9.091-1.585v.522c0 .256-.039.47-.117.641a.862.862 0 0 1-.322.387.877.877 0 0 1-.47.126.883.883 0 0 1-.47-.126.87.87 0 0 1-.32-.387 1.55 1.55 0 0 1-.117-.641v-.522c0-.258.039-.471.117-.641a.87.87 0 0 1 .32-.387.868.868 0 0 1 .47-.129c.177 0 .333.043.47.129a.862.862 0 0 1 .322.387c.078.17.117.383.117.641m.803.519v-.513c0-.377-.069-.701-.205-.973a1.46 1.46 0 0 0-.59-.63c-.253-.146-.559-.22-.916-.22-.356 0-.662.074-.92.22a1.441 1.441 0 0 0-.589.628c-.137.271-.205.596-.205.975v.513c0 .375.068.699.205.973.137.271.333.48.589.626.258.145.564.217.92.217.357 0 .663-.072.917-.217.256-.146.452-.355.589-.626.136-.274.205-.598.205-.973Zm1.29-.935v2.675h-.746v-3.999h.662l1.752 2.66h.032v-2.66h.75v4h-.656l-1.761-2.676h-.032Z"/>
+                    </svg>
+                </label>
+            </a> 
+        </div>
+    </div>  
+    <table class="table table-striped align-middle mb-0 bg-white">
+        <caption class="mx-3">
+            This caption succinctly communicates the purpose of the table — it's an inventory 
+            management page specifically focused on components used in the assembly of 
+            computers within the enterprise.
+        </caption>
+        <thead class="bg-light">
+            <tr>
+                <th>Component</th>
+                <th>Serial Nº</th>
+                <th>Purchase Price</th>
+                <th>Purchase Date</th>
+                <th>Supplier</th>
+                <th>Stock</th>
+                <th colspan="2" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for component in components %}
+                {% if component.stock > 0 %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center"> 
+                                {% if component.image %}
+                                    <img
+                                        src="{{component.image}}"
+                                        alt="{{component.name}}"
+                                        style="width: 45px; height: 45px"
+                                        class="rounded-circle"
+                                    />
+                                {% else %}
+                                    <img
+                                        src="https://imgs.search.brave.com/dZOZz-Sc4JextouhTr8OXVFW-n1azOfkwUZXk9eLdxg/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9wbHVz/cG5nLmNvbS9pbWct/cG5nL3BuZy1xdWVz/dGlvbi1oZWxwLXF1/ZXN0aW9uLW1hcmst/aWNvbi1kb3dubG9h/ZC1wbmctMjU4LnBu/Zw"
+                                        alt="component_img"
+                                        style="width: 45px; height: 45px"
+                                        class="rounded-circle"
+                                    />
+                                {% endif %}
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">{{component.name}}</p>
+                                    <p class="text-muted mb-0">{{component.component_type_name}}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">
+                                {% for serial_number in component.serial_numbers %}
+                                    {{serial_number}}<br>
+                                {% endfor %} 
+                            </p>
+                        </td>
+                        <td class="fw-bold">
+                            {% for purchase_price in component.purchase_prices %}
+                                {{purchase_price}}€<br>
+                            {% endfor %}    
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">
+                            {% for purchase_date in component.purchase_dates %}
+                                {{purchase_date}}<br>
+                            {% endfor %}  
+                            </p>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">
+                                {% for supplier in component.suppliers %}
+                                    {{supplier}}<br>
+                                {% endfor %}
+                            </p>
+                        </td>
+                        <td class="fw-bold">
+                            {{component.stock}}
+                        </td>
+                        {% if component.stock > 1 %}
+                            <td class="text-center">
+                                <a href="{% url 'ComponentsDetail' component.name component.component_type_id %}" class="btn btn-outline-secondary btn-sm btn-rounded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                                    </svg>
+                                </a>
+                            </td> 
+                        {% else %}
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a type="button" class="btn btn-outline-secondary btn-sm btn-rounded" href="{% url 'EditComponent' component.component_id %}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                                        </svg>
+                                    </a>
+                                    <a type="button" class="btn btn-outline-secondary btn-sm btn-rounded" href="{% url 'DeleteComponent' component.component_id %}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <form method="POST" action="{% url 'ImportFromJSON' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="json_file">
+        <button type="submit" class="btn btn-outline-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-arrow-up-fill" viewBox="0 0 16 16">
+                <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M6.354 9.854a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 8.707V12.5a.5.5 0 0 1-1 0V8.707z"/>
+            </svg>
+        </button>
+    </form>
+{% endblock main-content %}
+
+<script>
+    function downloadFile() {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{% url "ExportToJSON" %}';
+
+        const csrfTokenInput = document.createElement('input');
+        csrfTokenInput.type = 'hidden';
+        csrfTokenInput.name = 'csrfmiddlewaretoken';
+        csrfTokenInput.value = '{{ csrf_token }}';
+
+        form.appendChild(csrfTokenInput);
+
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+    }
+
+    function uploadFile() {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{% url "ImportFromJSON" %}';
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.name = 'file';
+
+    const csrfTokenInput = document.createElement('input');
+    csrfTokenInput.type = 'hidden';
+    csrfTokenInput.name = 'csrfmiddlewaretoken';
+    csrfTokenInput.value = '{{ csrf_token }}';
+
+    form.appendChild(fileInput);
+    form.appendChild(csrfTokenInput);
+
+    document.body.appendChild(form);
+
+    form.submit();
+
+    document.body.removeChild(form);
+}
+
+</script>

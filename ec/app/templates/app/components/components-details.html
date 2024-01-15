@@ -1,0 +1,87 @@
+{% extends 'app/base.html' %}
+{% block title %} Components {% endblock title %}
+
+{% block main-content %}
+    {% if components %}
+        <h1 class="my-5 text-center fw-bold">Management Page for {{components.0.name}}</h1>
+    {% else %}
+        <h1 class="my-5 text-center fw-bold">No component found</h1>
+    {% endif %}
+    <table class="table table-striped align-middle mb-0 bg-white">
+        <caption class="mx-3">
+            This caption succinctly communicates the purpose of the table — it's an inventory 
+            management page for a specific component. The components in here are presented and therefore, organized by their names.
+        </caption>
+        <thead class="bg-light">
+            <tr>
+                <th>Component</th>
+                <th>Serial Nº</th>
+                <th>Purchase Price</th>
+                <th>Purchase Date</th>
+                <th>Supplier</th>
+                <th colspan="2" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for component in components %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center"> 
+                            {% if component.image %}
+                                <img
+                                    src="{{component.image}}"
+                                    alt="{{component.name}}"
+                                    style="width: 45px; height: 45px"
+                                    class="rounded-circle"
+                                />
+                            {% else %}
+                                <img
+                                    src="https://imgs.search.brave.com/dZOZz-Sc4JextouhTr8OXVFW-n1azOfkwUZXk9eLdxg/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9wbHVz/cG5nLmNvbS9pbWct/cG5nL3BuZy1xdWVz/dGlvbi1oZWxwLXF1/ZXN0aW9uLW1hcmst/aWNvbi1kb3dubG9h/ZC1wbmctMjU4LnBu/Zw"
+                                    alt="component_img"
+                                    style="width: 45px; height: 45px"
+                                    class="rounded-circle"
+                                />
+                            {% endif %}
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1">{{component.name}}</p>
+                                <p class="text-muted mb-0">{{component.type_name}}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <p class="fw-normal">
+                            {{component.serial_number}}
+                        </p>
+                    </td>
+                    <td class="fw-bold">
+                            {{component.purchase_price}}€
+                    </td>
+                    <td>
+                        <p class="fw-normal mb-1">
+                            {{component.purchase_date}}
+                        </p>
+                    </td>
+                    <td>
+                        <p class="fw-normal mb-1">
+                            {{component.supplier_name}}
+                        </p>
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group">
+                            <a type="button" class="btn btn-outline-secondary btn-sm btn-rounded" href="{% url 'EditComponent' component.component_id %}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                                </svg>
+                            </a>
+                            <a type="button" class="btn btn-outline-secondary btn-sm btn-rounded" href="{% url 'DeleteComponent' component.component_id %}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock main-content %}

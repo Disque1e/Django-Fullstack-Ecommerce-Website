@@ -1,0 +1,50 @@
+{% extends 'app/base.html' %}
+{% block title %} Shipping Guides {% endblock title%}
+
+{% block main-content %}
+    <h1 class="my-5 text-center fw-bold">Management Page for Shipping Guides</h1>
+    <div class="text-center mb-3">
+        <div class="btn-group">
+            <a type="button" class="btn btn-outline-secondary" href="{% url 'AddWarehouse' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+            </a> 
+        </div>
+    </div>  
+    <table class="table table-striped align-middle mb-0 bg-white">
+        <caption class="mx-3">
+            This caption succinctly communicates the purpose of the table — 
+            This page provides an overview of the warehouses that the various suppliers the enterprise
+            works with have.
+        </caption>
+        <thead class="bg-light">
+            <tr>
+                <th>Shipping Date</th>
+                <th>Delivery Date</th>
+                <th colspan="2" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for guide in shipping_guides %}
+            <tr>
+                <td>
+                    <p class="fw-normal mb-1">{{guide.shipping_date}}</p>
+                </td>
+                <td>
+                    <p class="fw-normal mb-1">{{guide.delivery_date}}</p>
+                </td>
+                <td class="text-center">
+                    <div class="btn-group">
+                        <a type="button" class="btn btn-outline-secondary btn-sm btn-rounded" href="{% url 'EditShippingGuides' guide.guide_id %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                                <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                            </svg>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock main-content %}

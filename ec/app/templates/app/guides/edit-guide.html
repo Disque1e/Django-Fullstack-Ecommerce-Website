@@ -1,0 +1,20 @@
+{% extends 'app/base.html' %}
+{% block title %} Shipping Guides {% endblock title%}
+
+{% block main-content %}
+    <div class="my-5 mx-5">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="mt-4">
+                <button type="submit" class="btn btn-outline-success">Edit Shipping Guide</button>
+                <a type="button" class="btn btn-outline-danger mx-2" href="{% url 'ListShippingGuides' %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                    </svg>
+                    Go Back
+                </a>
+            </div>
+        </form>
+    </div>
+{% endblock main-content %}

@@ -1,0 +1,115 @@
+{% extends 'app/base.html' %}
+{% block title %} Equipments {% endblock title%}
+
+{% block main-content %}
+    <h1 class="my-5 text-center fw-bold">Inventory of Equipments</h1>
+    <div class="text-center mb-3">
+        {% if user.is_staff %}
+            <div class="btn-group">
+                <a type="button" class="btn btn-outline-secondary" href="{% url 'AddEquipment' %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                    </svg>
+                </a> 
+            </div>
+        {% endif %}
+    </div>  
+    {% if user.is_staff %}
+        <table class="table table-striped align-middle mb-0 bg-white">
+            <caption class="mx-3">
+                This caption succinctly communicates the purpose of the table — it's an inventory 
+                management page specifically focused on equipments the enterprise has produced.
+            </caption>
+            <thead class="bg-light">
+                <tr>
+                    <th>Equipment</th>
+                    <th>Serial Nº</th>
+                    <th>Value</th>
+                    <th>Components</th>
+                    <th>Availability</th>
+                    <th colspan="2" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equipment in equipments %}
+                    <tr>
+                        <td>
+                            <p class="fw-normal mb-1">{{equipment.name}}</p>
+                        </td>
+                        <td class="fw-bold">{{equipment.serial_number}}</td>
+                        <td>{{equipment.value}}€</td>
+                        <td>
+                            {% for component in equipment.components %}
+                                {{ component }}<br>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% if equipment.is_available == True %}
+                                <span style="background-color: #28a745; color: #fff;" class="badge">Available</span>
+                            {% else %}
+                                <span style="background-color: #dc3545; color: #fff;" class="badge">Unavailable</span>
+                            {% endif %}                            
+                        </td>                                               
+                        {% if user.is_staff %}
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a type="button" class="btn btn-outline-secondary btn-sm btn-rounded" href="{% url 'EditProduction' equipment.equipment_id %}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                                            <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                                        </svg>
+                                    </a>
+                                    <a type="button" class="btn btn-outline-secondary btn-sm btn-rounded" href="{% url 'EditEquipment' equipment.equipment_id %}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001"/>
+                                        </svg>
+                                    </a>
+                                    <a type="button" class="btn btn-outline-secondary btn-sm btn-rounded" href="{% url 'DeleteEquipment' equipment.equipment_id %}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </td>
+                        {% else %}
+                            <td class="text-center">
+                                <a type="button" class="btn btn-outline-secondary btn-sm btn-rounded" href="{% url 'OrderEquipment' equipment.equipment_id%}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-euro" viewBox="0 0 16 16">
+                                        <path d="M4 9.42h1.063C5.4 12.323 7.317 14 10.34 14c.622 0 1.167-.068 1.659-.185v-1.3c-.484.119-1.045.17-1.659.17-2.1 0-3.455-1.198-3.775-3.264h4.017v-.928H6.497v-.936q-.002-.165.008-.329h4.078v-.927H6.618c.388-1.898 1.719-2.985 3.723-2.985.614 0 1.175.05 1.659.177V2.194A6.6 6.6 0 0 0 10.341 2c-2.928 0-4.82 1.569-5.244 4.3H4v.928h1.01v1.265H4v.928z"/>
+                                    </svg>
+                                </a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="mx-5 row row-cols-1 row-cols-md-3 g-4">
+            {% for equipment in equipments %}
+                {% if equipment.is_available%}
+                    <div class="col">
+                        <div class="card">
+                            <img src="#" class="card-img-top" alt="{{ equipment.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ equipment.name }}</h5>
+                                <p class="card-text">Serial Nº: {{ equipment.serial_number }}</p>
+                                <p class="card-text">Value: {{ equipment.value }}€</p>
+                                <p class="card-text">Components:</p>
+                                <ul>
+                                    {% for component in equipment.components %}
+                                        <li>{{ component }}</li>
+                                    {% endfor %}
+                                </ul>
+                                <a href="{% url 'OrderEquipment' equipment.equipment_id %}" class="btn btn-outline-secondary btn-sm btn-rounded">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-euro" viewBox="0 0 16 16">
+                                        <path d="M4 9.42h1.063C5.4 12.323 7.317 14 10.34 14c.622 0 1.167-.068 1.659-.185v-1.3c-.484.119-1.045.17-1.659.17-2.1 0-3.455-1.198-3.775-3.264h4.017v-.928H6.497v-.936q-.002-.165.008-.329h4.078v-.927H6.618c.388-1.898 1.719-2.985 3.723-2.985.614 0 1.175.05 1.659.177V2.194A6.6 6.6 0 0 0 10.341 2c-2.928 0-4.82 1.569-5.244 4.3H4v.928h1.01v1.265H4v.928z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock main-content %}

@@ -1,0 +1,33 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %} Home {% endblock title%}
+
+{% block banner-slider %}
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active" style="height: 500px;">
+                <img src="{% static 'app/images/01.jpg' %}" class="d-block w-100" alt="banner image" style="object-fit: contain; height: 100%;">
+            </div>
+            <div class="carousel-item" style="height: 500px;">
+                <img src="{% static 'app/images/02.jpg' %}" class="d-block W-100" alt="banner image" style="object-fit: contain;">
+            </div>
+            <div class="carousel-item" style="height: 500px;">
+                <img src="{% static 'app/images/03.jpg' %}" class="d-block W-100" alt="banner image" style="object-fit: contain;">
+            </div>
+        </div>
+    </div>
+{% endblock banner-slider %}
+
+{% block main-content %}
+
+{% endblock main-content %}
+
+
+<script>
+    const myCarouselElement = document.querySelector('#myCarousel')
+
+    const carousel = new bootstrap.Carousel(myCarouselElement, {
+        interval: 2000,
+        touch: false
+    })
+</script>
